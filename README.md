@@ -26,7 +26,7 @@ Clone this repository and import in intellij ultimate
 >> - Contain all entities class
 
 >> payloader
->> - Container request payloader class classified by category
+>> - Container request payload class classified by category
 
 >> repositories
 >> - Container all entities repositories
@@ -37,7 +37,7 @@ Clone this repository and import in intellij ultimate
 >> services
 >> - Container all required services
 
-## GOOGLE CREDITENTIAL ##
+## GOOGLE CREDENTIAL ##
 Change username and password in application.properties file
 
 
