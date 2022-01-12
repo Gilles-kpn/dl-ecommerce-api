@@ -17,9 +17,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "Auth Module",
+                title = "E-commerce api",
                 version = "1.0",
-                description = "Module for authentication",
+                description = "Using Module for authentication",
                 contact = @Contact(
                         name = "KPANOU Gilles",
                         url = "http://localhost:8080",
@@ -29,7 +29,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         ),
         servers = @Server(
                 url = "http://localhost:8080",
-                description = "Auth server"
+                description = "commerce server"
         )
 )
 @SecurityScheme(
