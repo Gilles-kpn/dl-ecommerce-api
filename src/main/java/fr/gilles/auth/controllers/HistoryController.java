@@ -1,9 +1,9 @@
 package fr.gilles.auth.controllers;
 
-import fr.gilles.auth.entities.History;
-import fr.gilles.auth.entities.User;
+import fr.gilles.auth.entities.tracking.History;
+import fr.gilles.auth.entities.user.User;
 import fr.gilles.auth.payloader.query.QueryParams;
-import fr.gilles.auth.services.history.HistoryService;
+import fr.gilles.auth.services.tracking.HistoryService;
 import fr.gilles.auth.services.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,7 +36,7 @@ public class HistoryController {
 
     @GetMapping("manager")
     @PreAuthorize("hasRole('ROLE_MANAGER')")
-    @Operation(summary = "All history  | Manager Role needed")
+    @Operation(summary = "All history  | MANAGER ROLE REQUIRED")
     public ResponseEntity<Page<History>> all(QueryParams queryParams){
         return  ResponseEntity.ok(historyService.all(queryParams.toPageRequest()));
     }

@@ -1,8 +1,9 @@
-package fr.gilles.auth.entities;
+package fr.gilles.auth.entities.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.gilles.auth.entities.audit.Audit;
+import fr.gilles.auth.entities.rating.Like;
 import fr.gilles.auth.entities.roles.Role;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,12 @@ public class User extends Audit {
     @ToString.Exclude
     private String password;
 
+
+    private String picture;
+
     private boolean enabled = false;
+
+    private String provider;
 
     @ManyToMany
     @JsonIgnore
@@ -56,5 +62,9 @@ public class User extends Audit {
         return super.equals(o) && Objects.equals(email, user.email);
     }
 
+    @OneToMany
+    @JsonIgnore
+    @ToString.Exclude
+    private Collection<Like> likedProducts;
 
 }

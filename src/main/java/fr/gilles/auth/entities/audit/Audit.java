@@ -1,13 +1,12 @@
 package fr.gilles.auth.entities.audit;
 
-import fr.gilles.auth.entities.User;
+import fr.gilles.auth.entities.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;

@@ -1,6 +1,8 @@
 package fr.gilles.auth.payloader.user;
 
-import fr.gilles.auth.entities.User;
+import fr.gilles.auth.entities.user.Admin;
+import fr.gilles.auth.entities.user.Client;
+import fr.gilles.auth.entities.user.User;
 import fr.gilles.auth.payloader.Payloader;
 import lombok.Data;
 
@@ -30,4 +32,22 @@ public class UserCreate extends Payloader<User> {
         user.setEmail(email);
         return user;
     }
+
+    public Client toClient(){
+        Client client = new Client();
+        client.setName(name);
+        client.setPassword(password);
+        client.setEmail(email);
+        return  client;
+    }
+
+
+    public Admin toAdmin(){
+        Admin admin = new Admin();
+        admin.setName(name);
+        admin.setPassword(password);
+        admin.setEmail(email);
+        return  admin;
+    }
+
 }

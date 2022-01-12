@@ -1,8 +1,7 @@
 package fr.gilles.auth.payloader.user;
 
-import fr.gilles.auth.entities.User;
+import fr.gilles.auth.entities.user.User;
 import fr.gilles.auth.payloader.Payloader;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

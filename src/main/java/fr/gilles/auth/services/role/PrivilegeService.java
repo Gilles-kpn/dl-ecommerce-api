@@ -1,8 +1,11 @@
 package fr.gilles.auth.services.role;
 
 import fr.gilles.auth.entities.roles.Privilege;
+import fr.gilles.auth.entities.roles.Role;
+import fr.gilles.auth.payloader.query.QueryParams;
 import fr.gilles.auth.repositories.PrivilegeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -12,6 +15,8 @@ import javax.transaction.Transactional;
 public class PrivilegeService {
 
     private final PrivilegeRepository privilegeRepository;
+
+
 
     @Transactional
     public Privilege createPrivilegeIfNotFound(String name) {

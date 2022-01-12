@@ -1,7 +1,7 @@
-package fr.gilles.auth.services.history;
+package fr.gilles.auth.services.tracking;
 
-import fr.gilles.auth.entities.History;
-import fr.gilles.auth.entities.User;
+import fr.gilles.auth.entities.tracking.History;
+import fr.gilles.auth.entities.user.User;
 import fr.gilles.auth.repositories.HistoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -1,23 +1,19 @@
 package fr.gilles.auth.security.privileges;
 
-import fr.gilles.auth.entities.User;
+import fr.gilles.auth.entities.user.Admin;
+import fr.gilles.auth.entities.user.User;
 import fr.gilles.auth.entities.roles.Privilege;
 import fr.gilles.auth.entities.roles.Role;
-import fr.gilles.auth.repositories.PrivilegeRepository;
-import fr.gilles.auth.repositories.RoleRepository;
 import fr.gilles.auth.services.role.PrivilegeService;
 import fr.gilles.auth.services.role.RoleService;
 import fr.gilles.auth.services.user.UserService;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 @Component
@@ -45,7 +41,7 @@ public class SetupDataLoader  implements ApplicationListener<ContextRefreshedEve
         roleService.createRoleIfNotFound("ROLE_USER", List.of(readPrivilege));
 
         Role managerRole = roleService.findByName("ROLE_MANAGER");
-        User user = new User();
+        Admin user = new Admin();
         user.setPassword(passwordEncoder.encode("Gkpanou2@gmail.ce"));
         user.setEmail("admin@admin.com");
         user.setName("KPANOU Gilles");

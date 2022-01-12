@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -25,6 +26,13 @@ public class RoleService {
             roleRepository.save(role);
         }
         return role;
+    }
+
+
+
+
+    public List<Role> all(){
+        return roleRepository.findAll();
     }
 
     public Role findByName(String name){

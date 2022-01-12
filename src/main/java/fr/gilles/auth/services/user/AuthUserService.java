@@ -3,7 +3,6 @@ package fr.gilles.auth.services.user;
 import fr.gilles.auth.entities.roles.Privilege;
 import fr.gilles.auth.entities.roles.Role;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -26,7 +25,7 @@ public class AuthUserService  implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        fr.gilles.auth.entities.User user = userService.findByEmail(username);
+        fr.gilles.auth.entities.user.User user = userService.findByEmail(username);
         if(user != null)
             return new User( user.getEmail(),
                     user.getPassword(),

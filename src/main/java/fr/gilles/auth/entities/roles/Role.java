@@ -1,7 +1,7 @@
 package fr.gilles.auth.entities.roles;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fr.gilles.auth.entities.User;
+import fr.gilles.auth.entities.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;

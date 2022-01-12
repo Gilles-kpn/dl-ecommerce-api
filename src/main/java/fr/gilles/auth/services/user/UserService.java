@@ -1,22 +1,22 @@
 package fr.gilles.auth.services.user;
 
 
-import fr.gilles.auth.entities.User;
+import fr.gilles.auth.entities.user.User;
 import fr.gilles.auth.entities.roles.Privilege;
-import fr.gilles.auth.repositories.RoleRepository;
+import fr.gilles.auth.payloader.query.QueryParams;
 import fr.gilles.auth.repositories.UserRepository;
 import fr.gilles.auth.services.role.PrivilegeService;
 import fr.gilles.auth.services.role.RoleService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.webjars.NotFoundException;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -35,18 +35,27 @@ public class UserService {
 
 
     public User create(@NotNull User user) throws Exception {
-        if (findByEmail(user.getEmail()) == null){
+        User user1 = findByEmail(user.getEmail());
+        if (user1 == null){
             if(user.getRoles()==null){
                 Privilege readPrivilege  = privilegeService.createPrivilegeIfNotFound("READ_PRIVILEGE");
                 roleService.createRoleIfNotFound("ROLE_USER", List.of(readPrivilege));
                 user.setRoles(List.of(roleService.createRoleIfNotFound("ROLE_USER", List.of(readPrivilege))));
             }
             return  userRepository.save(user);
-        }else throw new Exception("There is an account with that email address: " + user.getEmail());
+        }else{
+            if(user1.isDeleted()){
+                user1.setName(user.getName());
+                user1.setEnabled(false);
+                user1.setDeleted(false);
+                return  userRepository.save(user);
+
+            }else  throw new Exception("There is an account with that email address: " + user.getEmail());
+        }
     }
 
 
-    public void activate(@NotNull String email) throws NotFoundException{
+    public void activate(@NotNull @NotEmpty  String email) throws NotFoundException{
         User user = findByEmail(email);
         if(user != null){
             user.setEnabled(true);
@@ -57,7 +66,7 @@ public class UserService {
     }
 
 
-    public void update(User user){
+    public void update(@NotNull @Validated User user){
         user = findByEmail(user.getEmail());
         if(user != null){
             userRepository.save(user);
@@ -66,8 +75,30 @@ public class UserService {
         }
     }
 
+    public Page<User> all(QueryParams queryParams){
+        return  userRepository.findAllByDeleted(queryParams.toPageRequest(), queryParams.isDeleted());
+    }
+
+    public void delete(@NotNull @NotEmpty  String email) throws Exception {
+        User user = findByEmail(email);
+        if(user != null)
+        {
+            user.setDeleted(true);
+            user.setEnabled(false);
+            userRepository.save(user);
+        }else throw new Exception("User not found");
+
+    }
 
 
+    public void recycle(@NotNull @NotEmpty String email) throws Exception {
+        User user = findByEmail(email);
+        if (user != null){
+            user.setDeleted(false);
+            userRepository.save(user);
+        }else
+            throw  new Exception("Not Found");
+    }
 
 
 
