@@ -26,10 +26,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                         email = "okpanou2@gmail.com"
                 )
 
-        ),
-        servers = @Server(
-                url = "http://localhost:8080",
-                description = "commerce server"
         )
 )
 @SecurityScheme(
