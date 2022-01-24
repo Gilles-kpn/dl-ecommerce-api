@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "CLOUDINARY_URL",
+      "type": "java.lang.String",
+      "description": "Description for CLOUDINARY_URL."
+  }
+] }

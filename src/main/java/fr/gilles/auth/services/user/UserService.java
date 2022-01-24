@@ -4,6 +4,7 @@ package fr.gilles.auth.services.user;
 import fr.gilles.auth.entities.user.User;
 import fr.gilles.auth.entities.roles.Privilege;
 import fr.gilles.auth.payloader.query.QueryParams;
+import fr.gilles.auth.payloader.response.CountStats;
 import fr.gilles.auth.repositories.UserRepository;
 import fr.gilles.auth.services.role.PrivilegeService;
 import fr.gilles.auth.services.role.RoleService;
@@ -16,6 +17,7 @@ import org.webjars.NotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -99,6 +101,23 @@ public class UserService {
         }else
             throw  new Exception("Not Found");
     }
+
+    public int count(boolean enabled){
+        return  userRepository.countAllByDeletedAndEnabled(false, enabled);
+    }
+
+    public int count(){
+        return (int) userRepository.count();
+    }
+
+    public List<CountStats> createdStats(Date start, Date end){
+        return  userRepository.createdStats(start, end);
+    }
+
+    public List<CountStats> deletedStats(Date start, Date end){
+        return  userRepository.deletedStats(start, end);
+    }
+
 
 
 

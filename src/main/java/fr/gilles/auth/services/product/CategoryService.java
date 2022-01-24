@@ -2,6 +2,7 @@ package fr.gilles.auth.services.product;
 
 import fr.gilles.auth.entities.products.Category;
 import fr.gilles.auth.payloader.query.QueryParams;
+import fr.gilles.auth.payloader.response.CountStats;
 import fr.gilles.auth.repositories.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.NotFound;
@@ -11,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -53,6 +54,25 @@ public class CategoryService {
             categoryRepository.save(category);
         }
     }
+
+
+
+    public Set<Category> findByNameIn(List<String> categories){
+        return  categoryRepository.findByNameIn(categories);
+    }
+
+    public int count( boolean deleted){
+        return  categoryRepository.countAllByDeleted(deleted);
+    }
+
+    public List<CountStats> createdStats(Date start, Date end){
+        return  categoryRepository.createdStats(start, end);
+    }
+
+    public List<CountStats> deletedStats(Date start, Date end){
+        return  categoryRepository.deletedStats(start, end);
+    }
+
 
 
 }

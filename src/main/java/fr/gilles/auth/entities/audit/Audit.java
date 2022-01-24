@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,13 +28,13 @@ public class Audit {
     @Column(nullable = false, updatable = false)
     @ToString.Include
     @EqualsAndHashCode.Include
-    protected Instant createdAt;
+    protected Date createdAt;
 
     @LastModifiedDate
     @Column(nullable = false)
     @ToString.Include
     @EqualsAndHashCode.Include
-    protected Instant updatedAt;
+    protected Date updatedAt;
 
     @Column(updatable = false)
     protected String code = UUID.randomUUID().toString();

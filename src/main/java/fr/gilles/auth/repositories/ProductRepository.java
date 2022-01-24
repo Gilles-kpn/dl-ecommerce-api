@@ -3,12 +3,15 @@ package fr.gilles.auth.repositories;
 import fr.gilles.auth.entities.products.Category;
 import fr.gilles.auth.entities.products.Product;
 import fr.gilles.auth.entities.user.Admin;
+import fr.gilles.auth.payloader.response.CountStats;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
@@ -18,5 +21,16 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Optional<Product> findByCode(String code);
     Page<Product> findByCategoryAndDeleted(Category category,boolean deleted, Pageable pageable);
     Page<Product> findByAuthorAndDeleted(Admin author, boolean deleted, Pageable pageable);
+    Page<Product> findByCategoryIsInAndDeleted(Set<Category> categories,boolean deleted, Pageable pageable);
+    int countAllByDeleted(boolean deleted);
+    @Query("select  " +
+            "new fr.gilles.auth.payloader.response.CountStats(count(product.code),product.createdAt )" +
+            "from Product  product  where product.createdAt between  :start and :end group by  DATE_FORMAT(product.createdAt, 'yyyy-MM-dd HH:mm:ss')")
+    List<CountStats> createdStats(@Param("start") Date start, @Param("end") Date end);
+
+    @Query("select  " +
+            "new fr.gilles.auth.payloader.response.CountStats(count(product.code),product.updatedAt )" +
+            "from Product  product where  (product.deleted = true)  and product.updatedAt between  :start and :end group by  DATE_FORMAT(product.updatedAt, 'yyyy-MM-dd HH:mm:ss') ")
+    List<CountStats> deletedStats(@Param("start") Date start, @Param("end") Date end);
 
 }

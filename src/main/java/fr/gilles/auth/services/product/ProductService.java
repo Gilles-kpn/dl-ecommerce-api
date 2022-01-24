@@ -1,11 +1,13 @@
 package fr.gilles.auth.services.product;
 
 import fr.gilles.auth.entities.picture.Picture;
+import fr.gilles.auth.entities.products.Category;
 import fr.gilles.auth.entities.products.Product;
 import fr.gilles.auth.entities.rating.Like;
 import fr.gilles.auth.entities.user.Admin;
 import fr.gilles.auth.entities.user.User;
 import fr.gilles.auth.payloader.query.QueryParams;
+import fr.gilles.auth.payloader.response.CountStats;
 import fr.gilles.auth.repositories.LikeRepository;
 import fr.gilles.auth.repositories.ProductRepository;
 import fr.gilles.auth.services.files.FileService;
@@ -115,9 +117,32 @@ public class ProductService {
         likeRepository.findByProductAndUser(product,user).ifPresent(likeRepository::delete);
     }
 
-    public Page<Product> fromSameAuthor( @NotNull Admin admin, QueryParams queryParams){
+    public Page<Product> fromAuthor(@NotNull Admin admin, QueryParams queryParams){
         return productRepository.findByAuthorAndDeleted(admin, queryParams.isDeleted(), queryParams.toPageRequest());
     }
+
+
+    public Page<Product> findByCategories(Set<Category> categories,QueryParams queryParams){
+        return  productRepository.findByCategoryIsInAndDeleted(categories,queryParams.isDeleted(), queryParams.toPageRequest());
+    }
+
+    public int count(boolean deleted){
+        return  productRepository.countAllByDeleted(deleted);
+    }
+
+
+    public List<CountStats> createdStats(Date start, Date end){
+        return  productRepository.createdStats(start, end);
+    }
+
+    public List<CountStats> deletedStats(Date start, Date end){
+        return  productRepository.deletedStats(start, end);
+    }
+
+
+
+
+
 
 
 

@@ -6,6 +6,7 @@ import fr.gilles.auth.entities.rating.Like;
 import fr.gilles.auth.entities.user.Admin;
 import fr.gilles.auth.entities.user.User;
 import fr.gilles.auth.payloader.products.ProductPayload;
+import fr.gilles.auth.payloader.query.ProductQueryParams;
 import fr.gilles.auth.payloader.query.QueryParams;
 import fr.gilles.auth.services.product.CategoryService;
 import fr.gilles.auth.services.product.ProductService;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,8 +30,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("product")
@@ -179,10 +180,32 @@ public class ProductController {
         Optional<Product> productOptional = productService.find(code);
         if(productOptional.isPresent()){
             if (productOptional.get().getAuthor() != null){
-                return  ResponseEntity.ok(productService.fromSameAuthor(productOptional.get().getAuthor(), queryParams));
+                return  ResponseEntity.ok(productService.fromAuthor(productOptional.get().getAuthor(), queryParams));
             }else return ResponseEntity.ok().build();
         }else throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot found product");
     }
 
+    @GetMapping("categories")
+    @Operation(summary = "Find Product by categories")
+    public ResponseEntity<Page<Product>> findByCategories(ProductQueryParams productQueryParams){
+        Set<Category> cats = categoryService.findByNameIn(Arrays.asList(productQueryParams.getCategories()));
+        if (cats.size() >0)
+            return  ResponseEntity.ok(productService.findByCategories(cats, productQueryParams));
+        else
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot found selected categories");
+
+    }
+
+
+    @GetMapping("from/current")
+    @Operation(summary = "Get current admin product | ADMIN OR MANAGER AUTHORIZATION",  security = @SecurityRequirement(name = "Bearer Token"))
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    public ResponseEntity<Page<Product>> currentAdminProduct(Authentication authentication, QueryParams queryParams){
+        Admin admin = (Admin) userService.findByEmail(authentication.getName());
+        if (admin != null)
+            return  ResponseEntity.ok(productService.fromAuthor(admin, queryParams));
+        else
+            throw  new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot find current admin ");
+    }
 
 }
