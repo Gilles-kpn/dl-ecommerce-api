@@ -20,11 +20,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("select  " +
             "new fr.gilles.auth.payloader.response.CountStats(count(user.code),user.createdAt )" +
-            "from User  user  where user.createdAt between  :start and :end group by  DATE_FORMAT(user.createdAt, 'yyyy-MM-dd HH:mm:ss')")
+            "from User  user  where user.createdAt between  :start and :end group by  DATE_FORMAT(cast(user.createdAt as text), 'yyyy-MM-dd HH:mm:ss')")
     List<CountStats> createdStats(@Param("start") Date start, @Param("end") Date end);
 
     @Query("select  " +
             "new fr.gilles.auth.payloader.response.CountStats(count(user.code),user.updatedAt )" +
-            "from User  user  where  (user.deleted = true ) and user.updatedAt between  :start and :end group by  DATE_FORMAT(user.updatedAt, 'yyyy-MM-dd HH:mm:ss') ")
+            "from User  user  where  (user.deleted = true ) and user.updatedAt between  :start and :end group by  DATE_FORMAT(cast(user.updatedAt as text), 'yyyy-MM-dd HH:mm:ss') ")
     List<CountStats> deletedStats(@Param("start") Date start, @Param("end") Date end);
 }

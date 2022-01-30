@@ -23,14 +23,15 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findByAuthorAndDeleted(Admin author, boolean deleted, Pageable pageable);
     Page<Product> findByCategoryIsInAndDeleted(Set<Category> categories,boolean deleted, Pageable pageable);
     int countAllByDeleted(boolean deleted);
+    Page<Product> findByDeletedOrCategoryIsInOrPriceBetween(boolean deleted,Set<Category> categories, int priceMin, int priceMax, Pageable pageable);
     @Query("select  " +
             "new fr.gilles.auth.payloader.response.CountStats(count(product.code),product.createdAt )" +
-            "from Product  product  where product.createdAt between  :start and :end group by  DATE_FORMAT(product.createdAt, 'yyyy-MM-dd HH:mm:ss')")
+            "from Product  product  where product.createdAt between  :start and :end group by  DATE_FORMAT(cast(product.createdAt as text ), 'yyyy-MM-dd HH:mm:ss')")
     List<CountStats> createdStats(@Param("start") Date start, @Param("end") Date end);
 
     @Query("select  " +
             "new fr.gilles.auth.payloader.response.CountStats(count(product.code),product.updatedAt )" +
-            "from Product  product where  (product.deleted = true)  and product.updatedAt between  :start and :end group by  DATE_FORMAT(product.updatedAt, 'yyyy-MM-dd HH:mm:ss') ")
+            "from Product  product where  (product.deleted = true)  and product.updatedAt between  :start and :end group by  DATE_FORMAT(cast(product.updatedAt as text), 'yyyy-MM-dd HH:mm:ss') ")
     List<CountStats> deletedStats(@Param("start") Date start, @Param("end") Date end);
 
 }

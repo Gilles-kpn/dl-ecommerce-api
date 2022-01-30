@@ -6,6 +6,7 @@ import fr.gilles.auth.entities.products.Product;
 import fr.gilles.auth.entities.rating.Like;
 import fr.gilles.auth.entities.user.Admin;
 import fr.gilles.auth.entities.user.User;
+import fr.gilles.auth.payloader.query.ProductQueryParams;
 import fr.gilles.auth.payloader.query.QueryParams;
 import fr.gilles.auth.payloader.response.CountStats;
 import fr.gilles.auth.repositories.LikeRepository;
@@ -41,8 +42,9 @@ public class ProductService {
     }
 
 
-    public Page<Product> all(QueryParams pageable){
-        return  productRepository.findByDeleted(pageable.isDeleted(),pageable.toPageRequest());
+    public Page<Product> all(ProductQueryParams pageable, Set<Category> categories){
+        return  productRepository.findByDeletedOrCategoryIsInOrPriceBetween(pageable.isDeleted(),categories,
+                pageable.getPriceMin(), pageable.getPriceMax()  ,pageable.toPageRequest());
     }
 
 

@@ -44,8 +44,9 @@ public class ProductController {
     private final UserService userService;
     @GetMapping
     @Operation(summary = "all products")
-    public ResponseEntity<Page<Product>> all(QueryParams queryParams){
-        return  ResponseEntity.ok(productService.all(queryParams));
+    public ResponseEntity<Page<Product>> all(ProductQueryParams queryParams){
+        Set<Category> cats = categoryService.findByNameIn(Arrays.asList(queryParams.getCategories()));
+        return  ResponseEntity.ok(productService.all(queryParams, cats));
     }
 
     @GetMapping("{name}/search")
@@ -183,17 +184,6 @@ public class ProductController {
                 return  ResponseEntity.ok(productService.fromAuthor(productOptional.get().getAuthor(), queryParams));
             }else return ResponseEntity.ok().build();
         }else throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot found product");
-    }
-
-    @GetMapping("categories")
-    @Operation(summary = "Find Product by categories")
-    public ResponseEntity<Page<Product>> findByCategories(ProductQueryParams productQueryParams){
-        Set<Category> cats = categoryService.findByNameIn(Arrays.asList(productQueryParams.getCategories()));
-        if (cats.size() >0)
-            return  ResponseEntity.ok(productService.findByCategories(cats, productQueryParams));
-        else
-            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot found selected categories");
-
     }
 
 
