@@ -20,11 +20,11 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     int countAllByDeleted(boolean deleted);
     @Query("select  " +
             "new fr.gilles.auth.payloader.response.CountStats(count(category.code),category.createdAt )" +
-            "from Category  category  where category.createdAt between  :start and :end group by  DATE_FORMAT(cast(category.createdAt as text), 'yyyy-MM-dd HH:mm:ss')")
+            "from Category  category  where category.createdAt between  :start and :end group by  to_date(cast(category.createdAt as text), 'yyyy-MM-dd HH:mm:ss')")
     List<CountStats> createdStats(@Param("start") Date start, @Param("end") Date end);
 
     @Query("select  " +
             "new fr.gilles.auth.payloader.response.CountStats(count(category.code),category.updatedAt )" +
-            "from Category  category where  (category.deleted = true)  and category.updatedAt between  :start and :end group by  DATE_FORMAT(cast(category.updatedAt as text), 'yyyy-MM-dd HH:mm:ss') ")
+            "from Category  category where  (category.deleted = true)  and category.updatedAt between  :start and :end group by  to_date(cast(category.updatedAt as text), 'yyyy-MM-dd HH:mm:ss') ")
     List<CountStats> deletedStats(@Param("start") Date start, @Param("end") Date end);
 }
