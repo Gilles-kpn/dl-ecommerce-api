@@ -19,12 +19,28 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     int countAllByDeletedAndEnabled(boolean deleted, boolean enabled);
 
     @Query("select  " +
-            "new fr.gilles.auth.payloader.response.CountStats(count(user.code),user.createdAt )" +
-            "from User  user  where user.createdAt between  :start and :end group by  to_date(cast(user.createdAt as text), 'yyyy-MM-dd HH:mm:ss')")
+            "new fr.gilles.auth.payloader.response.CountStats(" +
+            "count(user.code)," +
+            "to_date(cast(user.createdAt as text), 'yyyy-MM-dd') )" +
+            "from User  user  " +
+            "where  "+
+            "user.createdAt " +
+            "between to_date(cast(:start as text), 'yyyy-MM-dd') " +
+            "and to_date(cast( :end as text), 'yyyy-MM-dd') " +
+            "group by  " +
+            "to_date(cast(user.createdAt as text), 'yyyy-MM-dd') ")
     List<CountStats> createdStats(@Param("start") Date start, @Param("end") Date end);
 
     @Query("select  " +
-            "new fr.gilles.auth.payloader.response.CountStats(count(user.code),user.updatedAt )" +
-            "from User  user  where  (user.deleted = true ) and user.updatedAt between  :start and :end group by  to_date(cast(user.updatedAt as text), 'yyyy-MM-dd HH:mm:ss') ")
+            "new fr.gilles.auth.payloader.response.CountStats(count(user.code)," +
+            "to_date(cast(user.updatedAt as text), 'yyyy-MM-dd') )" +
+            "from User  user  " +
+            "where  (user.deleted = true )" +
+            "and " +
+            "user.updatedAt " +
+            "between to_date(cast(:start as text), 'yyyy-MM-dd') " +
+            "and to_date(cast( :end as text), 'yyyy-MM-dd') " +
+            "group by  " +
+            "to_date(cast(user.updatedAt as text), 'yyyy-MM-dd') ")
     List<CountStats> deletedStats(@Param("start") Date start, @Param("end") Date end);
 }

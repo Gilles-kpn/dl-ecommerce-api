@@ -25,13 +25,30 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     int countAllByDeleted(boolean deleted);
     Page<Product> findByDeletedOrCategoryIsInOrPriceBetween(boolean deleted,Set<Category> categories, int priceMin, int priceMax, Pageable pageable);
     @Query("select  " +
-            "new fr.gilles.auth.payloader.response.CountStats(count(product.code),product.createdAt )" +
-            "from Product  product  where product.createdAt between  :start and :end group by  to_date(cast(product.createdAt as text ), 'yyyy-MM-dd HH:mm:ss')")
+            "new fr.gilles.auth.payloader.response.CountStats(" +
+            "count(product.code)," +
+            "to_date(cast(product.createdAt as text), 'yyyy-MM-dd') )" +
+            "from Product  product  " +
+            "where  "+
+            "product.createdAt " +
+            "between to_date(cast(:start as text), 'yyyy-MM-dd') " +
+            "and to_date(cast( :end as text), 'yyyy-MM-dd') " +
+            "group by  " +
+            "to_date(cast(product.createdAt as text), 'yyyy-MM-dd') ")
     List<CountStats> createdStats(@Param("start") Date start, @Param("end") Date end);
 
     @Query("select  " +
-            "new fr.gilles.auth.payloader.response.CountStats(count(product.code),product.updatedAt )" +
-            "from Product  product where  (product.deleted = true)  and product.updatedAt between  :start and :end group by  to_date(cast(product.updatedAt as text), 'yyyy-MM-dd HH:mm:ss') ")
+            "new fr.gilles.auth.payloader.response.CountStats(" +
+            "count(product.code)," +
+            "to_date(cast(product.updatedAt as text), 'yyyy-MM-dd') )" +
+            "from Product  product  " +
+            "where  (product.deleted = true )" +
+            "and " +
+            "product.updatedAt " +
+            "between to_date(cast(:start as text), 'yyyy-MM-dd') " +
+            "and to_date(cast( :end as text), 'yyyy-MM-dd') " +
+            "group by  " +
+            "to_date(cast(product.updatedAt as text), 'yyyy-MM-dd') ")
     List<CountStats> deletedStats(@Param("start") Date start, @Param("end") Date end);
 
 }

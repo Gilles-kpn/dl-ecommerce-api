@@ -19,12 +19,29 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Set<Category> findByNameIn(List<String> name);
     int countAllByDeleted(boolean deleted);
     @Query("select  " +
-            "new fr.gilles.auth.payloader.response.CountStats(count(category.code),category.createdAt )" +
-            "from Category  category  where category.createdAt between  :start and :end group by  to_date(cast(category.createdAt as text), 'yyyy-MM-dd HH:mm:ss')")
+            "new fr.gilles.auth.payloader.response.CountStats(" +
+            "count(category.code)," +
+            "to_date(cast(category.createdAt as text), 'yyyy-MM-dd') )" +
+            "from Category  category  " +
+            "where  "+
+            "category.createdAt " +
+            "between to_date(cast(:start as text), 'yyyy-MM-dd') " +
+            "and to_date(cast( :end as text), 'yyyy-MM-dd') " +
+            "group by  " +
+            "to_date(cast(category.createdAt as text), 'yyyy-MM-dd') ")
     List<CountStats> createdStats(@Param("start") Date start, @Param("end") Date end);
 
     @Query("select  " +
-            "new fr.gilles.auth.payloader.response.CountStats(count(category.code),category.updatedAt )" +
-            "from Category  category where  (category.deleted = true)  and category.updatedAt between  :start and :end group by  to_date(cast(category.updatedAt as text), 'yyyy-MM-dd HH:mm:ss') ")
+            "new fr.gilles.auth.payloader.response.CountStats(" +
+            "count(category.code)," +
+            "to_date(cast(category.updatedAt as text), 'yyyy-MM-dd') )" +
+            "from Category  category  " +
+            "where  (category.deleted = true )" +
+            "and " +
+            "category.updatedAt " +
+            "between to_date(cast(:start as text), 'yyyy-MM-dd') " +
+            "and to_date(cast( :end as text), 'yyyy-MM-dd') " +
+            "group by  " +
+            "to_date(cast(category.updatedAt as text), 'yyyy-MM-dd') ")
     List<CountStats> deletedStats(@Param("start") Date start, @Param("end") Date end);
 }
