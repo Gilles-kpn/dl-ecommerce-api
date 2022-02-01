@@ -25,7 +25,7 @@ public class CategoryService {
 
 
     public Page<Category> findByNameContaining(String name, QueryParams queryParams){
-        return  categoryRepository.findByNameContainingAAndDeleted(name,queryParams.isDeleted(),queryParams.toPageRequest());
+        return  categoryRepository.findByNameContainingAndDeleted(name,queryParams.isDeleted(),queryParams.toPageRequest());
     }
 
 
