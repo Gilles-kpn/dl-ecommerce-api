@@ -39,7 +39,7 @@ public class Audit {
     @Column(updatable = false)
     protected String code = UUID.randomUUID().toString();
 
-    @JsonIgnore
+
     protected boolean deleted  = false;
 
 

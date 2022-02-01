@@ -61,6 +61,17 @@ public class CategoryService {
     }
 
 
+    public void recycle(@NotNull @Validated Category categoryToRecycle){
+        Optional<Category> optionalCategory = findByName(categoryToRecycle.getName());
+        if(optionalCategory.isPresent()){
+            Category category = optionalCategory.get();
+            category.setDeleted(false);
+            categoryRepository.save(category);
+        }
+    }
+
+
+
     public Set<Category> findByNameIn(List<String> categories){
         return  categoryRepository.findByNameInAndDeleted(categories,false);
     }

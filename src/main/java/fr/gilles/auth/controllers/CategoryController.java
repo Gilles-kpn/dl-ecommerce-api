@@ -73,5 +73,18 @@ public class CategoryController {
     }
 
 
+    @PutMapping("{name}/recycle")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @Operation(summary = "Recycle category | MANAGER ROLE REQUIRED", security = {@SecurityRequirement(name = "Bearer Token")})
+    public ResponseEntity<Category> recycle(@PathVariable @NotNull @NotBlank @NotEmpty String name){
+        Optional<Category> category = categoryService.findByName(name);
+        if (category.isPresent()) {
+            categoryService.recycle(category.get());
+            return  ResponseEntity.ok(category.get());
+        }
+        else throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot recycle the category "+name);
+    }
+
+
 
 }
