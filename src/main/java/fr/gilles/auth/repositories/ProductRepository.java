@@ -17,7 +17,8 @@ import java.util.*;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Page<Product> findByDeleted(boolean deleted,Pageable pageable);
-    Page<Product> findByNameIsLikeAndDeleted(String name, Pageable pageable,boolean deleted );
+    Page<Product> findByNameContainsAndDeleted(String name, Pageable pageable, boolean deleted );
+    Page<Product> findByNameContainsAndDeletedAndAuthor(String name, boolean deleted, Admin author, Pageable pageable);
     Optional<Product> findByCode(String code);
     Page<Product> findByCategoryAndDeleted(Category category,boolean deleted, Pageable pageable);
     Page<Product> findByAuthorAndDeleted(Admin author, boolean deleted, Pageable pageable);

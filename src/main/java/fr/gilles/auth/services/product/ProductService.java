@@ -49,7 +49,11 @@ public class ProductService {
 
 
     public Page<Product> search(@NotNull @NotEmpty @NotBlank String name, QueryParams params){
-        return  productRepository.findByNameIsLikeAndDeleted(name, params.toPageRequest(), params.isDeleted() );
+        return  productRepository.findByNameContainsAndDeleted(name, params.toPageRequest(), params.isDeleted() );
+    }
+
+    public Page<Product> search(@NotNull @NotEmpty @NotBlank String name, QueryParams params, Admin admin){
+        return productRepository.findByNameContainsAndDeletedAndAuthor(name,params.isDeleted(),admin, params.toPageRequest());
     }
 
     public Optional<Product> find(@NotNull @NotEmpty @NotBlank  String code){
