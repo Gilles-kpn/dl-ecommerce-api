@@ -181,7 +181,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("from/current")
+    @GetMapping("admin/current")
     @Operation(summary = "Get current admin product | ADMIN OR MANAGER AUTHORIZATION", security = @SecurityRequirement(name = "Bearer Token"))
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Page<Product>> currentAdminProduct(Authentication authentication, ProductQueryParams queryParams) {
