@@ -62,7 +62,7 @@ public class CategoryService {
 
 
     public Set<Category> findByNameIn(List<String> categories){
-        return  categoryRepository.findByNameIn(categories,false);
+        return  categoryRepository.findByNameInAndDeleted(categories,false);
     }
 
     public int count( boolean deleted){
