@@ -24,6 +24,11 @@ public class CategoryService {
     }
 
 
+    public Page<Category> findByNameContaining(String name, QueryParams queryParams){
+        return  categoryRepository.findByNameContainingAAndDeleted(name,queryParams.isDeleted(),queryParams.toPageRequest());
+    }
+
+
     public Category create(@NotNull @Validated Category categoryCreate){
         Optional<Category> categoryOptional = findByName(categoryCreate.getName());
         if (categoryOptional.isEmpty())
@@ -42,7 +47,7 @@ public class CategoryService {
 
 
     public Page<Category> all(QueryParams queryParams){
-        return  categoryRepository.findAllBy(queryParams.toPageRequest());
+        return  categoryRepository.findAllBy(queryParams.toPageRequest(),queryParams.isDeleted());
     }
 
 
@@ -56,9 +61,8 @@ public class CategoryService {
     }
 
 
-
     public Set<Category> findByNameIn(List<String> categories){
-        return  categoryRepository.findByNameIn(categories);
+        return  categoryRepository.findByNameIn(categories,false);
     }
 
     public int count( boolean deleted){

@@ -15,8 +15,9 @@ import java.util.*;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Optional<Category> findByName(String name);
-    Page<Category> findAllBy(Pageable pageable);
-    Set<Category> findByNameIn(List<String> name);
+    Page<Category> findByNameContainingAAndDeleted(String name,boolean deleted, Pageable pageable);
+    Page<Category> findAllBy(Pageable pageable, boolean deleted);
+    Set<Category> findByNameIn(List<String> name, boolean deleted);
     int countAllByDeleted(boolean deleted);
     @Query("select  " +
             "new fr.gilles.auth.payloader.response.CountStats(" +

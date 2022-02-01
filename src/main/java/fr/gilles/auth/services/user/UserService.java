@@ -118,6 +118,13 @@ public class UserService {
         return  userRepository.deletedStats(start, end);
     }
 
+    public Page<User> findByEmailContains(String email, QueryParams queryParams){
+        return userRepository.findByEmailContainingAndDeleted(email,queryParams.isDeleted(), queryParams.toPageRequest());
+    }
+
+
+
+
 
 
 

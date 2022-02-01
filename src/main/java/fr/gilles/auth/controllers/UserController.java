@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -80,6 +81,27 @@ public class UserController {
         }
     }
 
+    @GetMapping("{email}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+    @Operation(summary = "select user by email | MANAGER OR ADMIN ROLE REQUIRED")
+    public ResponseEntity<User> findByEmail(@PathVariable @NotNull @NotEmpty String email){
+        try {
+            return  ResponseEntity.ok(userService.findByEmail(email));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user", e);
+        }
+    }
+
+    @GetMapping("{email}/roles")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+    @Operation(summary = "select user by email | MANAGER OR ADMIN ROLE REQUIRED")
+    public ResponseEntity<Collection<Role>> findRolesByEmail(@PathVariable @NotNull @NotEmpty String email){
+        try {
+            return  ResponseEntity.ok(userService.findByEmail(email).getRoles());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user", e);
+        }
+    }
 
 
 

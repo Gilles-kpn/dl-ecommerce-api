@@ -15,6 +15,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByEmail(String email);
+    Page<User> findByEmailContainingAndDeleted(String email,  boolean deleted,Pageable pageable);
     Page<User> findAllByDeleted(Pageable pageable, boolean deleted);
     int countAllByDeletedAndEnabled(boolean deleted, boolean enabled);
 

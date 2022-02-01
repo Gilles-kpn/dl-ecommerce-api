@@ -40,6 +40,13 @@ public class CategoryController {
     }
 
 
+    @GetMapping("{search}/search")
+    @Operation(summary = "Search category by name")
+    public ResponseEntity<Page<Category>> search(@PathVariable @NotNull @NotBlank @NotEmpty String search, QueryParams queryParams){
+        return  ResponseEntity.ok(categoryService.findByNameContaining(search, queryParams));
+    }
+
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     @Operation(summary = "Create new category | MANAGER OR ADMIN ROLE REQUIRED", security = {@SecurityRequirement(name = "Bearer Token")})
