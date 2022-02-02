@@ -47,7 +47,7 @@ public class CategoryService {
 
 
     public Page<Category> all(QueryParams queryParams){
-        return  categoryRepository.findAllBy(queryParams.toPageRequest(),queryParams.isDeleted());
+        return  categoryRepository.findAllByDeleted(queryParams.toPageRequest(),queryParams.isDeleted());
     }
 
 
