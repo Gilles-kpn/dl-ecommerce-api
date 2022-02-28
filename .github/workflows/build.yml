@@ -9,7 +9,8 @@ jobs:
   postgres-job:
     # containers must run in Linux based operating systems
     runs-on: ubuntu-latest
-
+    # Docker Hub image that `postgres-job` executes in
+    container: node:latest
     # service containers to run with `postgres-job`
     services:
       # label used to access the service container
@@ -51,7 +52,10 @@ jobs:
           # `PGPASSWORD=postgres_password psql ...`
           PGPASSWORD: okpanou2
 
-      #build
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
       - name: Build Api
         uses: actions/checkout@v2
         with:
